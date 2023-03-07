@@ -1,33 +1,50 @@
 import { useState } from "preact/hooks";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { ReactP5Wrapper, Sketch } from "react-p5-wrapper";
+import {
+  ReactP5Wrapper,
+  P5CanvasInstance,
+  SketchProps,
+} from "react-p5-wrapper";
 
 import "./app.css";
 
-const sketch: Sketch = (p) => {
+type newSketchProps = SketchProps & {
+  amount: number;
+};
+
+const sketch = (p: P5CanvasInstance<newSketchProps>) => {
   const width = p.windowWidth;
   const height = p.windowHeight;
   const x = width / 2;
   const y = height / 2;
+  let amount = p.amount;
 
   p.setup = () => {
     p.createCanvas(width, height);
+  };
+
+  p.updateWithProps = (p) => {
+    if (p.amount) {
+      amount = p.amount;
+    }
   };
 
   p.draw = () => {
     p.background(0);
     p.stroke(255);
     p.strokeWeight(2);
-    p.line(x, y, p.mouseX, p.mouseY);
-
-    p.line(p.noiseSeed(p.frameCount), 0, x, height);
-    p.line(0, y, width, y);
-    // to randomly distort the line
+    p.noFill();
+    // p.ellipse(x, y, p.random(), width);
+    // p.ellipse(x - 80, y, p.random(), width);
+    // p.ellipse(x + 80, y, p.random(), width);
+    p.ellipse(p.amount, y, p.random(), width);
+    console.log(p.amount);
   };
 };
 
 export function App() {
   const [selected, setSelected] = useState(0);
+  const [amount, setAmount] = useState(5);
   console.log(selected);
 
   return (
@@ -62,7 +79,7 @@ export function App() {
           class="absolute top-0  z--10 left-0 h-screen w-screen overflow-hidden"
         ></motion.div>
         <section class="absolute top-0 left-0 z--9">
-          <ReactP5Wrapper sketch={sketch} />
+          <ReactP5Wrapper sketch={sketch} amount={amount} />
         </section>
       </section>
     </>
