@@ -23,9 +23,9 @@ const sketch = (p: P5CanvasInstance<newSketchProps>) => {
     p.createCanvas(width, height);
   };
 
-  p.updateWithProps = (p) => {
-    if (p.amount) {
-      amount = p.amount;
+  p.updateWithProps = (props: any) => {
+    if (props.amount) {
+      amount = props.amount;
     }
   };
 
@@ -34,11 +34,11 @@ const sketch = (p: P5CanvasInstance<newSketchProps>) => {
     p.stroke(255);
     p.strokeWeight(2);
     p.noFill();
-    // p.ellipse(x, y, p.random(), width);
-    // p.ellipse(x - 80, y, p.random(), width);
-    // p.ellipse(x + 80, y, p.random(), width);
-    p.ellipse(p.amount, y, p.random(), width);
-    console.log(p.amount);
+    p.ellipse(x, y, p.random(), width);
+    p.ellipse(x - 80, y, p.random(), width);
+    p.ellipse(x + 80, y, p.random(), width);
+    p.ellipse(x - amount, y, p.random(), width);
+    // console.log(amount);
   };
 };
 
@@ -54,7 +54,11 @@ export function App() {
           <h1>mylo</h1>
         </header>
         <nav class="grid grid-cols-3 gap-2 font-mono">
-          <motion.button id="0" class="px-8 m-1" onClick={() => setSelected(0)}>
+          <motion.button
+            id="0"
+            class="px-8 m-1"
+            onClick={() => setAmount(amount + 1)}
+          >
             Hub
           </motion.button>
           <motion.button id="1" class="px-8 m-1" onClick={() => setSelected(1)}>
